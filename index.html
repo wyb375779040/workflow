@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 产品新的工作方式</title>
+  <style>
+    :root {
+      --bg: #0c1217;
+      --panel: #121c22;
+      --panel-2: #17242c;
+      --line: rgba(122, 156, 170, 0.2);
+      --text: #edf4f2;
+      --text-soft: #a8b9b7;
+      --text-dim: #6d8385;
+      --green: #62d6a5;
+      --cyan: #56c6d7;
+      --red: #f08a88;
+      --amber: #f0b46c;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+      --shadow: 0 24px 64px rgba(0, 0, 0, 0.28);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Avenir Next", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      line-height: 1.7;
+      background:
+        radial-gradient(circle at top left, rgba(98, 214, 165, 0.08), transparent 28%),
+        radial-gradient(circle at top right, rgba(86, 198, 215, 0.12), transparent 26%),
+        linear-gradient(180deg, #0c1217 0%, #0f171d 45%, #0a0f13 100%);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(16px);
+      background: rgba(12, 18, 23, 0.8);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar-inner {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: #071011;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--green), var(--cyan));
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .brand-subtitle {
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    .nav a {
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--text-soft);
+      border: 1px solid transparent;
+      transition: all 0.16s ease;
+    }
+
+    .nav a:hover {
+      color: var(--text);
+      border-color: var(--line);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .page {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 28px 20px 60px;
+    }
+
+    .hero,
+    .section {
+      background: rgba(18, 28, 34, 0.92);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+    }
+
+    .hero {
+      padding: 32px;
+      background:
+        linear-gradient(180deg, rgba(98, 214, 165, 0.08), rgba(18, 28, 34, 0.94) 38%),
+        rgba(18, 28, 34, 0.92);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--green);
+      background: rgba(98, 214, 165, 0.08);
+      border: 1px solid rgba(98, 214, 165, 0.24);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      font-size: clamp(32px, 4.8vw, 52px);
+      line-height: 1.12;
+      letter-spacing: -0.03em;
+      margin-bottom: 14px;
+      max-width: 920px;
+    }
+
+    .hero p {
+      color: var(--text-soft);
+      font-size: 16px;
+      max-width: 900px;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .meta-chip {
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-soft);
+      font-size: 13px;
+    }
+
+    .statement {
+      margin-top: 22px;
+      padding: 18px 20px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(98, 214, 165, 0.18);
+      background: linear-gradient(90deg, rgba(98, 214, 165, 0.1), rgba(86, 198, 215, 0.07));
+      font-size: 17px;
+    }
+
+    .section {
+      margin-top: 24px;
+      padding: 28px;
+    }
+
+    .section-kicker {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .section h2 {
+      font-size: 28px;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .section-desc {
+      margin-top: 10px;
+      color: var(--text-soft);
+      font-size: 15px;
+      max-width: 860px;
+    }
+
+    .flow-grid,
+    .stages-grid,
+    .principles-grid,
+    .two-col {
+      display: grid;
+      gap: 16px;
+    }
+
+    .flow-grid,
+    .principles-grid,
+    .two-col {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .stages-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 18px;
+    }
+
+    .card,
+    .stage-card,
+    .role-card,
+    .callout {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+    }
+
+    .card,
+    .callout,
+    .role-card {
+      padding: 20px;
+    }
+
+    .flow-tag {
+      display: inline-block;
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .flow-tag.old {
+      color: var(--red);
+      background: rgba(240, 138, 136, 0.1);
+      border: 1px solid rgba(240, 138, 136, 0.2);
+    }
+
+    .flow-tag.new {
+      color: var(--green);
+      background: rgba(98, 214, 165, 0.1);
+      border: 1px solid rgba(98, 214, 165, 0.2);
+    }
+
+    .flow-line {
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.7;
+    }
+
+    .flow-note {
+      margin-top: 12px;
+      color: var(--text-soft);
+      font-size: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background: var(--panel-2);
+    }
+
+    th,
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      font-size: 14px;
+    }
+
+    th {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.03);
+      font-weight: 700;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    td {
+      color: var(--text-soft);
+    }
+
+    .highlight {
+      color: var(--text);
+      font-weight: 700;
+    }
+
+    .stage-card {
+      padding: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stage-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--green), var(--cyan));
+    }
+
+    .stage-num {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: rgba(98, 214, 165, 0.12);
+      color: var(--green);
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .stage-card h3,
+    .role-card h3,
+    .callout h3 {
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+
+    .stage-goal,
+    .role-card p,
+    .callout p {
+      color: var(--text-soft);
+      font-size: 14px;
+    }
+
+    .meta-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .meta-item {
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(122, 156, 170, 0.12);
+    }
+
+    .meta-item strong {
+      display: block;
+      font-size: 13px;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .meta-item span {
+      color: var(--text-soft);
+      font-size: 14px;
+    }
+
+    .bullet-title {
+      margin-top: 14px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    ul,
+    ol {
+      padding-left: 20px;
+      color: var(--text-soft);
+    }
+
+    li + li {
+      margin-top: 6px;
+    }
+
+    .roles-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .quote-box {
+      margin-top: 16px;
+      padding: 18px 20px;
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(86, 198, 215, 0.18);
+      background: rgba(86, 198, 215, 0.08);
+    }
+
+    .callout {
+      border-color: rgba(240, 180, 108, 0.18);
+      background: rgba(240, 180, 108, 0.08);
+    }
+
+    .callout h3 {
+      color: var(--amber);
+    }
+
+    .callout li {
+      color: #ead4b7;
+    }
+
+    .footer {
+      margin-top: 18px;
+      color: var(--text-dim);
+      font-size: 12px;
+    }
+
+    @media (max-width: 1100px) {
+      .roles-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 900px) {
+      .topbar-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav {
+        justify-content: flex-start;
+      }
+
+      .flow-grid,
+      .stages-grid,
+      .principles-grid,
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding: 20px 14px 50px;
+      }
+
+      .hero,
+      .section {
+        padding: 20px;
+      }
+
+      .roles-grid {
+        grid-template-columns: 1fr;
+      }
+
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="brand-mark">AI</div>
+        <div>
+          <div class="brand-title">产品技术ClaudeCode协作模式</div>
+          <div class="brand-subtitle">GitHub Pages 可发布版本</div>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="#compare">新旧对比</a>
+        <a href="#stages">八阶段</a>
+        <a href="#collab">内部协同</a>
+        <a href="#mapping">AiPM 映射</a>
+        <a href="#cadence">运行节奏</a>
+        <a href="#pitfalls">常见坑</a>
+        <a href="#conclusion">结论</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div class="eyebrow">v1.1.0 · 2026-04-23 · 诸葛亮 / 产品规划</div>
+      <h1>AI 产品新的工作方式，不是更快写 PRD，而是把协作链路整体前置和做实。</h1>
+      <p>
+        有了 Claude Code 之后，产品工作不应该再停留在“需求交接”。新的方式应该把情报、问题、规则、
+        技术共创、验收口径、数据复盘都放进同一条主线程里，让产品、设计、技术、数据围绕统一上下文持续协同。
+      </p>
+      <div class="meta-row">
+        <div class="meta-chip">产品名：产品技术ClaudeCode协作模式</div>
+        <div class="meta-chip">适用对象：产品 / 设计 / 技术 / 数据 / 运营</div>
+      </div>
+      <div class="statement">
+        PRD 不再是起点，而是阶段性产物。AI 也不只是写文档，而是前置分析、规则建模、研发协同、复盘沉淀的协作中枢。
+      </div>
+    </section>
+
+    <section class="section" id="compare">
+      <div class="section-kicker">Old vs New</div>
+      <h2>旧工作方式 vs 新工作方式</h2>
+      <p class="section-desc">过去是“交接式研发”，以后要变成“共创式研发”。先把问题和规则讲清楚，再进入文档、技术和开发。</p>
+
+      <div class="flow-grid" style="margin-top: 18px;">
+        <div class="card">
+          <div class="flow-tag old">旧方式</div>
+          <div class="flow-line">PRD → 技术评审 → 开发实现 → 联调验收</div>
+          <div class="flow-note">起点是写文档，很多隐性规则和边界条件被留到后面，返工往往集中在联调阶段暴露。</div>
+        </div>
+        <div class="card">
+          <div class="flow-tag new">新方式</div>
+          <div class="flow-line">情报扫描 → 问题定义 → 功能规则 → 在线 PRD → 技术共创 → AI 辅助开发 → 联调验收 → 数据复盘 → 资产沉淀</div>
+          <div class="flow-note">PRD 变成共识文档，技术和设计提早介入，AI 贯穿前置分析到上线复盘。</div>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>维度</th>
+            <th>旧方式</th>
+            <th>新方式</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="highlight">工作起点</td><td>产品写 PRD</td><td>产品先做情报、目标、规则</td></tr>
+          <tr><td class="highlight">协作模式</td><td>串行交接</td><td>多角色并行共创</td></tr>
+          <tr><td class="highlight">AI 角色</td><td>写文档 / 写代码工具</td><td>知识中枢 + 分析助手 + 实现助手</td></tr>
+          <tr><td class="highlight">技术介入时间</td><td>PRD 完成后</td><td>规则阶段提前介入</td></tr>
+          <tr><td class="highlight">设计介入时间</td><td>需求相对稳定后</td><td>问题定义后尽早介入</td></tr>
+          <tr><td class="highlight">返工来源</td><td>联调才发现理解偏差</td><td>前置在规则和验收阶段暴露问题</td></tr>
+          <tr><td class="highlight">验收依据</td><td>PRD 描述</td><td>功能规则 + 验收清单 + 测试路径</td></tr>
+          <tr><td class="highlight">产出沉淀</td><td>文档散落</td><td>统一目录、统一版本、统一上下文</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section" id="stages">
+      <div class="section-kicker">Eight Stages</div>
+      <h2>新的八阶段工作方式</h2>
+      <p class="section-desc">整体链路从“先写 PRD”改成“先做判断、再建规则、再共创实现、最后复盘沉淀”。</p>
+
+      <div class="stages-grid">
+        <article class="stage-card">
+          <div class="stage-num">1</div>
+          <h3>情报扫描</h3>
+          <p class="stage-goal">在写 PRD 前先确认外部怎么做、内部哪里痛、机会值不值得做。</p>
+          <div class="meta-list">
+            <div class="meta-item"><strong>主责</strong><span>产品经理</span></div>
+            <div class="meta-item"><strong>AI 动作</strong><span>竞品拆解、反馈归类、数据摘要、机会点提炼</span></div>
+            <div class="meta-item"><strong>产出</strong><span>竞品分析、用户问题清单、机会判断卡</span></div>
+          </div>
+        </article>
+
+        <article class="stage-card">
+          <div class="stage-num">2</div>
+          <h3>问题定义</h3>
+          <p class="stage-goal">把模糊想法变成明确的问题陈述，而不是直接开写大 PRD。</p>
+          <div class="meta-list">
+            <div class="meta-item"><strong>主责</strong><span>产品经理</span></div>
+            <div class="meta-item"><strong>AI 动作</strong><span>反向追问边界条件、识别隐性假设、补异常场景</span></div>
+            <div class="meta-item"><strong>产出</strong><span>问题定义卡、目标指标、范围边界、优先级</span></div>
+          </div>
+        </article>
+
+        <article class="stage-card">
+          <div class="stage-num">3</div>
+          <h3>功能规则建模</h3>
+          <p class="stage-goal">在 PRD 之前先把规则讲清楚，把返工最多的部分前置。</p>
+          <div class="meta-list">
+            <div class="meta-item"><strong>主责</strong><span>产品经理</span></div>
+            <div class="meta-item"><strong>AI 动作</strong><span>生成规则草稿、状态流转、异常和权限分支</span></div>
+            <div class="meta-item"><strong>产出</strong><span>功能规则清单、状态流转、异常处理、权限矩阵</span></div>
+          </div>
+        </article>
+
+        <article class="stage-card">
+          <div class="stage-num">4</div>
+          <h3>在线 PRD</h3>
+          <p class="stage-goal">把前面的情报、问题、规则，收敛成团队可以共享的正式文档。</p>
+          <div class="meta-list">
+            <div class="meta-item"><strong>主责</strong><span>产品经理</span></div>
+            <div class="meta-item"><strong>AI 动作</strong><span>生成结构化 PRD 初稿、补目录、整理变更记录</span></div>
+            <div class="meta-item"><strong>产出</strong><span>在线 PRD、版本记录、验收口径</span></div>
+          </div>
+        </article>
+
+        <article class="stage-card">
+          <div class="stage-num">5</div>
+          <h3>技术共创与任务拆解</h3>
+          <p class="stage-goal">把“技术评审”从被动挑错，升级成产品、技术、AI 的方案共创。</p>
+          <div class="meta-list">
+            <div class="meta-item"><strong>主责</strong><span>技术负责人</span></div>
+            <div class="meta-item"><strong>AI 动作</strong><span>方案草稿、风险提示、开发拆解、测试点补充</span></div>
+            <div class="meta-item"><strong>产出</strong><span>技术方案卡、任务拆解、风险清单、联调依赖表</span></div>
+          </div>
+        </article>
+
+        <article class="stage-card">
+          <div class="stage-num">6</div>
+          <h3>AI 辅助开发实现</h3>
+          <p class="stage-goal">让 Claude Code 进入研发主流程，而不是只在边缘帮忙。</p>
+          <div class="meta-list">
+            <div class="meta-item"><strong>主责</strong><span>技术负责人 / 开发</span></div>
+            <div class="meta-item"><strong>AI 动作</strong><span>生成代码初稿、补测试、做 review、解释上下文</span></div>
+            <div class="meta-item"><strong>产出</strong><span>可运行代码、测试脚本、自测记录</span></div>
+          </div>
+        </article>
+
+        <article class="stage-card">
+          <div class="stage-num">7</div>
+          <h3>联调验收与上线</h3>
+          <p class="stage-goal">把“验收”从感受式判断，变成有清单、有路径、有结论的动作。</p>
+          <div class="meta-list">
+            <div class="meta-item"><strong>主责</strong><span>产品经理 + 技术负责人</span></div>
+            <div class="meta-item"><strong>AI 动作</strong><span>生成验收清单、测试路径、回归检查项、上线检查单</span></div>
+            <div class="meta-item"><strong>产出</strong><span>验收记录、问题单、上线检查单</span></div>
+          </div>
+        </article>
+
+        <article class="stage-card">
+          <div class="stage-num">8</div>
+          <h3>数据复盘与资产沉淀</h3>
+          <p class="stage-goal">不是上线即结束，而是把经验回收到下一轮。</p>
+          <div class="meta-list">
+            <div class="meta-item"><strong>主责</strong><span>产品经理 / 数据</span></div>
+            <div class="meta-item"><strong>AI 动作</strong><span>汇总上线表现、识别漏斗问题、沉淀最佳实践和坑点</span></div>
+            <div class="meta-item"><strong>产出</strong><span>数据复盘、问题归因、AI 数据资产库</span></div>
+          </div>
+        </article>
+      </div>
+
+      <div class="quote-box">很多过去在联调时暴露的问题，本质上都不是开发问题，而是规则没有提前说清。</div>
+    </section>
+
+    <section class="section" id="collab">
+      <div class="section-kicker">Internal Collaboration</div>
+      <h2>产品内部怎么协同</h2>
+      <p class="section-desc">新的工作方式不是让产品一个人更忙，而是让产品、设计、技术、数据围绕统一主线程协作。Claude Code 横向服务所有角色。</p>
+
+      <div class="roles-grid">
+        <article class="role-card"><h3>产品 Owner</h3><p>定目标、控优先级、做关键决策。</p></article>
+        <article class="role-card"><h3>功能 PM</h3><p>拉通问题定义、功能规则、PRD 版本。</p></article>
+        <article class="role-card"><h3>设计 / 体验</h3><p>提前参与规则和关键路径设计，不再只接原型需求。</p></article>
+        <article class="role-card"><h3>技术负责人</h3><p>在规则阶段就介入，避免后置打回。</p></article>
+        <article class="role-card"><h3>数据 / 运营</h3><p>提前定义指标、验收口径、上线反馈闭环。</p></article>
+      </div>
+
+      <div class="principles-grid" style="margin-top: 18px;">
+        <article class="card">
+          <h3>一个需求，一个主线程</h3>
+          <ul>
+            <li>一个需求只保留一个主文档和一个主对话上下文</li>
+            <li>所有变更围绕这条主线程展开</li>
+            <li>不允许微信、口头、会议纪要各说一版</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>先规则，后长文</h3>
+          <ul>
+            <li>没有规则清单，不进入 PRD</li>
+            <li>没有异常路径，不进入开发</li>
+            <li>没有验收清单，不进入上线</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>争议前置，不把问题堆到联调</h3>
+          <ul>
+            <li>业务争议放在问题定义阶段解决</li>
+            <li>技术争议放在技术共创阶段解决</li>
+            <li>体验争议放在原型和关键路径阶段解决</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h3>AI 负责提效，人类负责拍板</h3>
+          <ul>
+            <li>AI 负责整理、补盲点、生成初稿、辅助执行</li>
+            <li>产品、技术、设计仍然对自己的专业判断负责</li>
+          </ul>
+        </article>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>三个必须统一的协同载体</th>
+            <th>作用</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="highlight">问题定义卡</td><td>统一目标、范围、成功标准</td></tr>
+          <tr><td class="highlight">功能规则清单</td><td>统一系统行为和边界</td></tr>
+          <tr><td class="highlight">验收上线清单</td><td>统一完成定义和上线口径</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section" id="mapping">
+      <div class="section-kicker">AiPM Mapping</div>
+      <h2>和 AiPM 五阶段的映射关系</h2>
+      <p class="section-desc">新的工作方式不是推翻旧流程，而是把每个阶段做深、做实、做成可协同。</p>
+
+      <div class="two-col" style="margin-top: 18px;">
+        <div>
+          <table style="margin-top: 0;">
+            <thead>
+              <tr>
+                <th>新工作方式阶段</th>
+                <th>AiPM 阶段归属</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>情报扫描 + 问题定义</td><td>产品规划</td></tr>
+              <tr><td>功能规则 + 在线 PRD</td><td>产品需求</td></tr>
+              <tr><td>原型补充 + 技术共创</td><td>产品设计</td></tr>
+              <tr><td>上线验证 + 使用分析</td><td>数据分析</td></tr>
+              <tr><td>复盘结论 + 方法沉淀</td><td>Ai数据资产库</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <aside class="callout">
+          <h3>映射后的真实含义</h3>
+          <ul>
+            <li>产品规划不再只是方向描述，还要前置情报扫描和问题定义。</li>
+            <li>产品需求不再只是写 PRD，而要把规则、版本和验收口径讲清楚。</li>
+            <li>产品设计不只交原型，还要参与关键路径、技术共创和体验判断。</li>
+            <li>数据分析和资产沉淀不再是附属动作，而是下一轮迭代的起点。</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="cadence">
+      <div class="section-kicker">Cadence</div>
+      <h2>建议的实际运行节奏</h2>
+      <p class="section-desc">一个标准需求可以按日推进。会议只保留真正需要人拍板的环节，其他同步优先通过 Claude Code 整理成异步文档。</p>
+
+      <div class="two-col" style="margin-top: 18px;">
+        <div>
+          <table style="margin-top: 0;">
+            <thead>
+              <tr>
+                <th>时间</th>
+                <th>关键动作</th>
+                <th>主责</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Day 1</td><td>情报扫描 + 问题定义</td><td>产品</td></tr>
+              <tr><td>Day 2</td><td>功能规则评审</td><td>产品 + 技术 + 设计</td></tr>
+              <tr><td>Day 3</td><td>在线 PRD 定稿 + 技术共创</td><td>产品 + 技术 + AI</td></tr>
+              <tr><td>Day 4-5</td><td>Claude Code 辅助开发 + 自测</td><td>技术</td></tr>
+              <tr><td>Day 6</td><td>联调验收 + 补缺陷</td><td>产品 + 技术</td></tr>
+              <tr><td>Day 7</td><td>上线 + 数据观察点确认</td><td>产品 + 技术 + 运营</td></tr>
+              <tr><td>Day 8+</td><td>数据复盘 + 资产沉淀</td><td>产品 + 数据 + AI</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <aside class="callout">
+          <h3>三类必须保留的会议</h3>
+          <ol>
+            <li>范围决策会：决定做什么、不做什么。</li>
+            <li>方案争议会：解决业务和技术冲突。</li>
+            <li>上线放行会：决定是否上线、是否回滚。</li>
+          </ol>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="pitfalls">
+      <div class="section-kicker">Pitfalls</div>
+      <h2>落地时最容易踩的坑</h2>
+      <p class="section-desc">这套工作方式最怕“看起来用了 AI，实际上还是老流程”。真正的变化在于是否把问题、规则、验收和复盘都纳入同一条主线程。</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>坑点</th>
+            <th>表现</th>
+            <th>纠偏方式</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="highlight">还是从写 PRD 开始</td><td>文档很长，但规则不清楚</td><td>强制先出问题定义卡和规则清单</td></tr>
+          <tr><td class="highlight">AI 只做秘书</td><td>只让 AI 写纪要，不让 AI 参与规则和实现</td><td>把 AI 放进前置分析和开发流程</td></tr>
+          <tr><td class="highlight">技术介入过晚</td><td>PRD 写完后才发现不可做</td><td>规则阶段就让技术进来</td></tr>
+          <tr><td class="highlight">验收口径模糊</td><td>联调时反复争论“算不算完成”</td><td>验收清单跟 PRD 同步维护</td></tr>
+          <tr><td class="highlight">上线后没人复盘</td><td>每轮都在重复犯错</td><td>固定数据复盘和资产沉淀动作</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="section" id="conclusion">
+      <div class="section-kicker">Conclusion</div>
+      <h2>最终结论</h2>
+      <div class="statement">
+        Claude Code 时代，产品新的工作方式不是“更快写 PRD”，而是把产品工作从文档驱动，升级成问题驱动、规则驱动、协同驱动。
+      </div>
+
+      <div class="two-col" style="margin-top: 18px;">
+        <div class="card">
+          <h3>对内</h3>
+          <ul>
+            <li>产品、设计、技术、数据可以围绕统一上下文持续共创。</li>
+            <li>协作不再依赖碎片化会议和口头对齐，而是依赖统一主线程。</li>
+            <li>AI 不是边缘工具，而是贯穿全流程的效率中枢。</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>对外交付</h3>
+          <ul>
+            <li>情报判断</li>
+            <li>问题定义</li>
+            <li>功能规则</li>
+            <li>技术方案</li>
+            <li>开发任务</li>
+            <li>验收清单</li>
+            <li>数据复盘</li>
+            <li>方法资产</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer">GitHub Pages 发布入口文件：index.html</div>
+    </section>
+  </main>
+</body>
+</html>
